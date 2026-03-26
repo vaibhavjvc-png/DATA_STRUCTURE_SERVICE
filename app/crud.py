@@ -26,7 +26,24 @@ def create_data_element(db: Session, dataset_id: int, element: schemas.DataEleme
     return db_element
 
 
+
+
 def get_data_elements(db: Session, dataset_id: int):
     return db.query(models.DataElement).filter(
         models.DataElement.dataset_id == dataset_id
     ).all()
+
+def create_data_element(db, dataset_id, element):
+    existing = db.query(models.DataElement).filter(
+        models.DataElement.dataset_id == dataset_id,
+        models.DataElement.name == element.name
+    ).first()
+
+    if existing:
+        raise Exception("Data element already exists")
+
+    db_element = models.DataElement(**element.dict(), dataset_id=dataset_id)
+    db.add(db_element)
+    db.commit()
+    db.refresh(db_element)
+    return db_element
