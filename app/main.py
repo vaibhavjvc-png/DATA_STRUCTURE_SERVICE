@@ -2,7 +2,8 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import models, schemas, crud
 from .database import engine, SessionLocal, Base
-
+from app.schemas import ItemCreate
+from app.services import DataStructureService
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -15,6 +16,12 @@ def get_db():
     finally:
         db.close()
 
+@app.post("/items")
+def create_item(item: ItemCreate):
+    try:
+        return service.add_item(item)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 # Dataset APIs
 @app.post("/datasets/", response_model=schemas.DatasetResponse)
