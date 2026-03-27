@@ -30,7 +30,7 @@ The service manages an in-memory representation of items.
 | Validation in code | Flexible | Slight performance overhead |
 
 
-## 🧪 Testing Requirements
+##  Testing Requirements
 
 ### Business Rules Enforced
 
