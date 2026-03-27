@@ -20,3 +20,8 @@ def test_add_data_element():
 
     assert response.status_code == 200
     assert response.json()["name"] == "amount"
+
+def test_duplicate_name():
+    client.post("/items", json={"name": "duplicate", "value": 10})
+    response = client.post("/items", json={"name": "duplicate", "value": 20})
+    assert response.status_code != 200
